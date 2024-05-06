@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coral Database</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: auto;  
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+			background-color: white;
+        }
+        th {
+            background-color: #b1c5bc;
+        }
+		.download_table{ 
+			height:40px;
+            width:100px;
+			float: left;
+			margin-left: 10px;
+			background-color: #F9F9F9;
+			border: 1px solid black;
+			cursor: pointer;
+			margin-bottom: 20px;
+		
+		}
+		.scroll {
+			height: 500px; 
+			overflow-y: auto;
+			border: 1px solid ;
+			padding: 10px;
+			background-color: white;
+		}
+		.scroll thead th { 
+		  position: sticky;
+		  top: 0; 
+		}
+        .user-input {
+            border: 1px solid ;
+            padding: 10px;
+            margin-bottom: 20px;
+			background-color: #f1f1f1;
+			box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+        }
+		.main-header {
+            border: 1px solid ;
+            padding: 10px;
+			margin: 0 auto 20px auto;
+			background-color: #f1f1f1;
+			box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+			width: 50%;
+			height: 40px;
+			font-size:30px;
+			text-align: center;
+			border-radius: 25px;
+        }
+		.input-background {
+            border: 1px solid ;
+            padding: 10px;
+            margin-bottom: 20px;
+			background-color: white;
+			box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+        }
+        .slidecontainer {
+            width: 50%;
+			margin-left: 10px;
+        }
+        .example-text {
+            margin-left: 10px;
+        }
+		.example-values{
+			text-decoration: underline;
+			cursor: pointer;
+		}
+        .tabbar {
+            display: flex;
+            width: auto;
+            justify-content: space-between;
+            background-color: #f1f1f1;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        .tab {
+            flex-grow: 1;
+            text-align: center;
+            cursor: pointer;
+			padding: 10px;
+			border: 1px solid;
+			font-size: 18px;
+        }
+        .tab.active {
+            background-color: #ccc;
+            box-shadow: none;
+			 padding: 10px;
+        }
+        .tabcontent {
+            display: none;
+        }
+        .active-tabcontent {
+            display: block;
+        }
+		.tab:hover {
+			background-color: #b6b6b6 ;
+			 padding: 10px;
+		}
+        .collapsible {
+            background-color: #777;
+            color: white;
+            cursor: pointer;
+            padding: 12px;
+            width: auto;
+			border: 1px solid ;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .collapsible.active, .collapsible:hover {
+            background-color: #555;
+        }
+        .collapsible::before {
+            content: "\25BA";
+            margin-right: 10px;
+        }
+        .active.collapsible::before {
+            content: "\25BC";
+        }
+        .content {
+            padding: 0 18px;
+            display: none;
+			border: 1px solid ;
+            overflow: hidden;
+            background-color: #f1f1f1;
+			box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+        }
+        .submit_button {
+            height:40px;
+            width:75px;
+            border-radius: 25px;
+			cursor: pointer;
+			background-color: white;
+        }
+        .hover-value {
+            font-size: 15px;
+            margin-top: 5px;
+        }
+        .noUi-value {
+            color: black; 
+            font-size: 15px;
+        }
+		.highlight {
+			background-color: #FFEA00;
+			transition: background-color 1s ease-in-out;
+		}
+		.noUi-connect, .progress-bar {
+			background-color: #c5b1ba;
+		}
+		.reset-button{
+			height:25px;
+            width:100px;
+			float: right;
+			margin-left: 10px;
+			background-color: #F9F9F9;
+			border: 1px solid black;
+			cursor: pointer;
+		}
+		.reset-all-button{
+			height:40px;
+            width:150px;
+			margin-top: 10px;
+			float: right;
+			background-color: #F9F9F9;
+			border: 1px solid black;
+			cursor: pointer;
+		}
+		input[type="checkbox"] {
+			width: 25px;
+			height: 17px;
+			vertical-align: middle;
+		}
+		.noUi-pips {
+		  pointer-events: none;
+		}
+		.tooltip {
+			position: absolute;
+			display: none;
+			background-color: rgba(0, 0, 0, 0.9);
+			color: white;
+			padding: 5px;
+			border-radius: 3px;
+			pointer-events: none;
+			z-index: 1000;
+		}
+		.lb-caption {
+			font-size: 17px !important;
+			background-color: rgba(255, 255, 255, 0.8); 
+			color: black; 
+			padding: 5px;
+			text-align: center !important;
+		}
+		.image-container {
+			white-space: nowrap; 
+		}
+
+		.image-container img {
+			display: inline-block;
+			width: auto; 
+			max-width: 350px; 
+			margin: 0 20px; 
+			vertical-align: top; 
+		}
+		.image-preview img {
+			max-width: 350px;
+			max-height: auto;
+		}
+		html {
+			scroll-behavior: smooth;
+		}
+		body {
+        background-color: #b1bac5;
+		}
+		.no-visited-style  {
+			color: black;
+		}
+    </style>
+</head>
+<body>
+    <h1 class = "main-header"><strong>Porites (Stony Coral) Database</strong></h1>
+    
+    <!-- --------------
+        WEBSITE TABS 
+    ---------------- -->
+    <div class="tabbar">
+        <div class="tab" onclick="openTab(event, 'intro')">Home</div>
+        <div class="tab" onclick="openTab(event, 'data')">Data</div>
+		<div class="tab" onclick="openTab(event, 'graph')">Graphs</div>
+        <div class="tab" onclick="openTab(event, 'media')">Media</div>
+        <div class="tab" onclick="openTab(event, 'help')">Help</div>
+    </div>
+
+    <!-- ------------------
+        INTRODUCTION TAB
+    -------------------- -->
+    <div id="intro" class="tabcontent active-tabcontent"><br>
+        <div class="user-input">
+			<p><strong>Project Name: </strong>A Comprehensive Database for Coral Diversity in Turneffe Atoll</p>
+			<p><strong>Student Developers: </strong>Johnathan Zhang, Saumya Pothukuchi, Zachary Derse, Grace Aboussleman</p>
+			<p><strong>Faculty Advisor: </strong> Dr. John Finnerty, Department of Biology Department & BU Marine Program
+			<p><strong>Statement: </strong> This project was developed at Boston University as part of BF768, Spring 2024, under Prof. Gary Benson as the instructor.</p>
+            <p><strong>Abstract: </strong>For the past decade, the Finnerty lab has collected multiple data types surrounding coral reef populations in Turneffe Atoll Marine Reserve, Belize, for the coral species Finger Coral (Porites porites). 
+			The data is divided into two main categories: phenotypic and variant call data (vcf data). The phenotypic data is further divided into location information, ecological volume (area covered by a coral colony),
+			Tag IDs, which are the IDs by which the coral can be recognised, etc.</p> 
+        </div>	
+    </div>
+
+    <!-- ---------------------
+        DATABASE SEARCH TAB
+    ----------------------- -->
+    <div id="data" class="tabcontent"><br>
+        <div class="input-background">
+		<p>This tab allows the user to explore the coral phenotypic and VCF data. The data can also be filtered by the options present in the filters section.</p>
+		<p><strong>Note: The help page is linked for each header for additional information and they redirect to the corresponding help page section.</strong></p>
+            <!-- All Filters -->
+            <div class="collapsible">Filters</div>
+            <div class="content">
+				<button style="margin-right: 17px;" id="reset_all_filters" class="reset-all-button">Reset ALL Filters</button>
+				<br>
+                <a href="#" onclick="openTab(event, 'help', 'help_tagid')" id="tagid_help" class="no-visited-style" >Input Tag ID:</a>&nbsp;&nbsp;
+					<input type="text" id="tagid" placeholder="121...">
+					<span class="example-text">(Example Tag IDs: 
+						<span class="example-values" onclick="fillInput('tagid', '121')">121</span>, 
+						<span class="example-values" onclick="fillInput('tagid', '106')">106</span>
+					)</span>
+				<br><br>
+                <a href="#" onclick="openTab(event, 'help', 'help_scaffoldid')" id="scaffold_help" class="no-visited-style">Input Scaffold ID:</a>&nbsp;&nbsp;
+				<input type="text" id="scaffold" placeholder="Sc0000458...">
+				<span class="example-text">(Example Scaffold IDs: 
+					<span class="example-values" onclick="fillInput('scaffold', 'Sc0000458')">Sc0000458</span>, 
+					<span class="example-values" onclick="fillInput('scaffold', 'Sc0000211')">Sc0000211</span>
+				)</span>
+				
+				<br><br>
+
+                <!-- Include VCF Selection-->
+                <a href="#" onclick="openTab(event, 'help', 'help_linkingvcf')" id="vcflinking_help" class="no-visited-style">Link phenotypic data with VCF data?</a> (Choose <strong>YES</strong> if VCF Filters need to be used):&nbsp;&nbsp;
+				<select style="height: 25px; width: 80px; text-align: center;" id="vcf">
+					<option value="Yes">YES</option>
+					<option value="No" selected>NO</option>
+				</select>
+				
+				<br><br>
+
+				<span> Sort the resultant table by: &nbsp;&nbsp;
+											<select style="height: 25px; width: 150px; text-align: center;" id="sort_by">
+												<option value="year" selected>Year</option>
+												<option value="location">Location</option>
+												<option value="tagid"> Tag ID</option>
+												<option value="eco_volume">Ecological Volume</option>
+											</select>
+				</span>	
+
+				<br><br>
+				
+                <!-- Phenotypic Data Filters  -->
+                <div class="collapsible">Phenotypic Data Filters</div>
+                <div class="content">
+                    <button id="reset_all_sliders" class="reset-all-button">Reset ALL Sliders</button>
+					<br>
+                        <a href="#" onclick="openTab(event, 'help', 'help_year')" style = "margin-left:10px;" id="year_help" class="no-visited-style"> Year: </a>&nbsp;&nbsp;<input type="checkbox" name="year" value="2015" checked> 2015
+                        <input type="checkbox" name="year" value="2016"> 2016
+                        <input type="checkbox" name="year" value="2017"> 2017
+                        <input type="checkbox" name="year" value="2018"> 2018
+						<br><br>
+
+                        <a href="#" onclick="openTab(event, 'help', 'help_location')" style = "margin-left:10px;" id="location_help" class="no-visited-style">Location: </a>&nbsp;&nbsp;<input type="checkbox" name="location" value="Channel-North"> Channel-North
+                        <input type="checkbox" name="location" value="Channel-South"> Channel-South
+                        <input type="checkbox" name="location" value="Creek-West"> Creek-West
+                        <input type="checkbox"  name="location" value="Creek-East"> Creek-East
+						<br><br>
+
+                        <a href="#" onclick="openTab(event, 'help', 'help_mortality')" style = "margin-left:10px;" id="mortality_help" class="no-visited-style">Mortality: </a>&nbsp;&nbsp;<input type="checkbox" name="mortality" value="Alive"> Alive
+                        <input type="checkbox" name="mortality" value="Missing"> Missing
+                        <input type="checkbox" name="mortality" value="Dead"> Dead
+                        <input type="checkbox" name="mortality" value="New"> New
+						<br><br>
+						
+						<div class="slidecontainer">
+                        <a href="#" onclick="openTab(event, 'help', 'help_eco_vol')" id="eco_vol_help" class="no-visited-style">Ecological Volume (cm<sup>3</sup>):</a>
+						<button id="eco_vol_reset" class="reset-button">Reset slider</button>
+						<br><br><br><br>
+                        <div id="eco_vol"></div>
+                        <br><br><br>
+
+                        <a href="#" onclick="openTab(event, 'help', 'help_ln_eco_vol')" id="ln_eco_vol_help" class="no-visited-style">Natural Log of Ecological Volume (cm<sup>3</sup>):</a>
+						<button id="ln_eco_vol_reset" class="reset-button">Reset slider</button>
+						<br><br><br><br>
+                        <div id="ln_eco_vol"></div>
+                        <br><br><br>
+
+                        <a href="#" onclick="openTab(event, 'help', 'help_length')" id="length_help" class="no-visited-style">Length (cm):</a>
+						<button id="length_reset" class="reset-button">Reset slider</button>
+						<br><br><br><br>
+                        <div id="length"></div>
+                        <br><br><br>
+						
+						<a href="#" onclick="openTab(event, 'help', 'help_width')" id="width_help" class="no-visited-style">Width (cm):</a>
+						<button id="width_reset" class="reset-button">Reset slider</button>
+						<br><br><br><br>
+                        <div id="width"></div>
+                        <br><br><br>
+						
+						<a href="#" onclick="openTab(event, 'help', 'help_height')" id="height_help" class="no-visited-style">Height (cm):</a>
+						<button id="height_reset" class="reset-button">Reset slider</button>
+						<br><br><br><br>
+                        <div id="height"></div>
+                        <br><br><br>
+                    </div>
+                </div>
+                <br>
+
+                <!-- VCF Data Filters -->
+                <div class="collapsible">VCF Filters</div>
+                <div class="content"><br>
+                    <div class="slidecontainer">
+                        <a href="#" onclick="openTab(event, 'help', 'help_allele_freq')" id="allele_freq_help" class="no-visited-style">Allele Frequency:</a>
+						<button id="allele_freq_reset" class="reset-button">Reset slider</button>
+						<br><br><br><br>
+                        <div id="allele_freq"></div><br><br><br>
+                    </div>
+                </div>
+                <br>
+
+                <!-- Advanced Data Filters -->
+                <div class="collapsible">Advanced Data Filters</div>
+					<div class="content"><br>
+                    <p> This section allows grouping of data based on either location or mortality which can be used to evaluate aggregate functions of interet.</p>
+
+					<a href="#" onclick="openTab(event, 'help', 'help_groupby')" id="groupby_help" class="no-visited-style"><strong>Group by:</strong></a> &nbsp;&nbsp; <select style="height: 25px; width: 80px; text-align: center;" id="groupby">
+						<option value="None" selected>None </option>
+						<option value="Location">Location</option>
+						<option value="alive_status">Mortality</option>
+					</select><br><br>
+                    
+					<hr>
+                        <p><strong>Aggregate Functions:</strong></p>
+                        <a href="#" onclick="openTab(event, 'help', 'help_count')" id="count_help" class="no-visited-style">Get number of indviduals based on group by:</a> &nbsp;&nbsp; 
+						<input type="radio" id = "count1" name="count" value="Yes">
+						<label for="count1">Yes</label>
+						<input type="radio" id = "count2" name="count" value="No" checked>
+						<label for="count2">No</label>
+						<br><br>
+                        
+                        <a href="#" onclick="openTab(event, 'help', 'help_average')" id="average_help" class="no-visited-style">Average of:</a> &nbsp;&nbsp; <select style="height: 25px; width: 200px; text-align: center;" id="average">
+                            <option value="None" selected>None </option>
+                            <option value="length_cm">Length of polyp</option>
+						    <option value="width_cm">Width of polyp</option>
+						    <option value="height_cm">Height of polyp</option>
+                            <option value="eco_volume">Ecological Volume of polyp</option>
+						</select>	
+						<br><br>
+
+                    </div><br>
+                </div>
+                <br>
+
+
+                <button class = "submit_button" id="get_table_button" type="button">Submit</button><br><br>
+            </div>
+		<div id="out_table"></div>
+        </div>
+    </div>
+	
+    
+    
+
+    <!-- ----------- 
+        MEDIA TAB
+    ------------- -->
+    <div id="media" class="tabcontent"><br>
+        <div class="user-input">
+		<p>This tab hosts images from the BU Marine website which are taken and maintained by Dr. John Finnerty and his lab. The main website can be found here: <a href="https://bumarine.smugmug.com" target="_blank">BU Marine Program Media Library</a></p>
+		<p>A list of different species/organisms of corals listed below for reference and can be used to jump sections:</p>
+		<ol>
+			<li  class="no-visited-style"><a href="#acropora_palmata" onclick="smoothScroll(event)" style= "color:black;">Acropora Palmata / Elkhorn Coral</a></li>	
+			<li  class="no-visited-style"><a href="#diploria" onclick="smoothScroll(event)" style= "color:black;"> Diploria / Brain Corals</a></li>	
+			<li class="no-visited-style"><a href="#orbicella" onclick="smoothScroll(event)" style= "color:black;">Orbicella / Stony Coral</a></li>			
+			<li class="no-visited-style"><a href="#porites_divaricata" onclick="smoothScroll(event)" style= "color:black;">Porites Divaricata / Thin Finger Coral</a></li>
+			<li  class="no-visited-style"><a href="#siderastrea" onclick="smoothScroll(event)" style= "color:black;">Siderastrea / Massive Starlet Coral</a></li>
+		<br>
+			<hr>
+		<br>
+		<p>Images:</p>
+		</ol>
+			<div class="image-container">
+			<ol>
+				<li>
+					<p id="acropora_palmata">
+						<a href="https://bumarine.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Acropora" target="_blank">
+							<span>Acropora Palmata / Elkhorn Coral:</span>
+						</a>
+					</p>
+				</li>	
+						<a href="https://photos.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Acropora/i-JvmScBC/0/FFKkmdTkvpv7dC6s2djwJFBvfwC55MDLLcgCDtnXP/XL/2015_1110_BI569_BlackbirdCaye_0541_JRF-XL.jpg" data-lightbox="acropora_palmata1" class="image-preview" data-title="Antlers of the coral which give the coral the common name of Elkhorn.">
+							<img src="https://photos.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Acropora/i-JvmScBC/0/FFKkmdTkvpv7dC6s2djwJFBvfwC55MDLLcgCDtnXP/XL/2015_1110_BI569_BlackbirdCaye_0541_JRF-XL.jpg" alt="Antlers of the coral which give the coral the common name of Elkhorn." class="image-tooltip" data-description="Antlers of the coral which give the coral the common name of Elkhorn.">
+						</a>
+
+						<a href="https://photos.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Acropora/i-RdNFjHc/0/D9DGnBGqB3XPx6gKzJpkVqvhH7BSvJNzQ9hsFdJ6t/XL/2015_1110_BI569_BlackbirdCaye_0651_JRF-XL.jpg" data-lightbox="acropora_palmata2" class="image-preview" data-title="Close up of the polyp">
+							<img src="https://photos.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Acropora/i-RdNFjHc/0/D9DGnBGqB3XPx6gKzJpkVqvhH7BSvJNzQ9hsFdJ6t/XL/2015_1110_BI569_BlackbirdCaye_0651_JRF-XL.jpg" alt="Close up of the polyp" class="image-tooltip" data-description="Close up of the polyp">
+						</a>
+						
+						<a href="https://photos.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Acropora/i-9LMjgqm/0/bdkvpQfmGKwzqkN4PzcnqN2pJdJ5R9WQqxr6tskw/XL/2015_1110_BI569_BlackbirdCaye_0563_JRF-XL.jpg" data-lightbox="acropora_palmata3" class="image-preview" data-title="Finnerty lab hard at work">
+							<img src="https://photos.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Acropora/i-9LMjgqm/0/bdkvpQfmGKwzqkN4PzcnqN2pJdJ5R9WQqxr6tskw/XL/2015_1110_BI569_BlackbirdCaye_0563_JRF-XL.jpg" alt="Finnerty lab hard at work" class="image-tooltip" data-description="Finnerty lab hard at work">
+						</a>
+					<br>
+						<hr>
+					<br>	
+						
+					<li>
+						<p id="diploria">
+							<a href="https://bumarine.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Diploria" target="_blank">
+								<span>Diploria / Brain Corals:</span>
+							</a>
+						</p>
+					</li>
+
+						<a href="https://photos.smugmug.com/SITE-VISITS/Calabash-Caye-Field-Station-July-2022/July-24-PM-Majors-Reef/i-ZGZZS4d/0/FsFTq5RxL8hJxfwvf5mDFZJJbGr28zgPr2csQgW8/XL/2022_0724_PM_MajorsReef_0488-XL.jpg" data-lightbox="diploria1" class="image-preview" data-title="Pseudodiploria strigosa and a bluehead wrasse">
+							<img src="https://photos.smugmug.com/SITE-VISITS/Calabash-Caye-Field-Station-July-2022/July-24-PM-Majors-Reef/i-ZGZZS4d/0/FsFTq5RxL8hJxfwvf5mDFZJJbGr28zgPr2csQgW8/XL/2022_0724_PM_MajorsReef_0488-XL.jpg" alt="Pseudodiploria strigosa and a bluehead wrasse" class="image-tooltip" data-description="Pseudodiploria strigosa and a bluehead wrasse">
+						</a>
+
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-BNm3dRV/0/FJW7hv98WWqtdjb74cMTB3JwSTsbgNQfkZz2mGkjD/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0157-X2.jpg" data-lightbox="diploria2" class="image-preview" data-title="Close up of Pseudodiploria Clivosa (Knobby Brain Coral)">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-BNm3dRV/0/FJW7hv98WWqtdjb74cMTB3JwSTsbgNQfkZz2mGkjD/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0157-X2.jpg" alt="Close up of Pseudodiploria Clivosa (Knobby Brain Coral)" class="image-tooltip" data-description="Close up of Pseudodiploria Clivosa (Knobby Brain Coral)">
+						</a>
+						
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-HfBcX9Q/0/n47MfsZnqFFq8sr7THxBXK6vS6wR4GJKv39h3hSf/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0139-X2.jpg" data-lightbox="diploria3" class="image-preview" data-title="Meandrina meandrites (Maze Coral)">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-HfBcX9Q/0/n47MfsZnqFFq8sr7THxBXK6vS6wR4GJKv39h3hSf/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0139-X2.jpg" alt="Meandrina meandrites (Maze Coral)" class="image-tooltip" data-description="Meandrina meandrites (Maze Coral)">
+						</a>
+					<br>
+						<hr>
+					<br>
+					
+					<li>
+						<p id="orbicella">
+							<a href="https://bumarine.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Orbicella" target="_blank">
+								<span>Orbicella / Stony Coral:</span>
+							</a>
+						</p>
+					</li>
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-mtPvtbL/0/Cw7xQHB8hqfwz9XVSRkJ34nnKpkDJQcmr6PLjHkNm/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0124-X2.jpg" data-lightbox="orbicella2" class="image-preview" data-title="A big Orbicella annularis (Boulder Star Coral)">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-mtPvtbL/0/Cw7xQHB8hqfwz9XVSRkJ34nnKpkDJQcmr6PLjHkNm/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0124-X2.jpg" alt="A big Orbicella annularis (Boulder Star Coral)" class="image-tooltip" data-description="A big Orbicella annularis (Boulder Star Coral)">
+						</a>
+						
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-bMmJ3Tk/0/FZR2P76MV7NtTCjQ3vr74xtSRXBshkQFCtvZZ6RsC/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0127-X2.jpg" data-lightbox="orbicella1" class="image-preview" data-title="The common name boulder star coral comes from the star shaped polyps">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-bMmJ3Tk/0/FZR2P76MV7NtTCjQ3vr74xtSRXBshkQFCtvZZ6RsC/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0127-X2.jpg" alt="The common name boulder star coral comes from the star shaped polyps" class="image-tooltip" data-description="The common name boulder star coral comes from the star shaped polyps">
+						</a>
+						
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-HVzn552/0/LrHK4LHmc7mNfVbhzVKVc95Kr9q28ZTqGhVx2mHr/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0160-X2.jpg" data-lightbox="orbicella3" class="image-preview" data-title="Most abundant species of reef-building coral in the Caribbean">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-HVzn552/0/LrHK4LHmc7mNfVbhzVKVc95Kr9q28ZTqGhVx2mHr/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0160-X2.jpg" alt="Most abundant species of reef-building coral in the Caribbean" class="image-tooltip" data-description="Most abundant species of reef-building coral in the Caribbean">
+						</a>
+					<br>
+						<hr>
+					<br>
+				
+					<li>
+						<p id="porites_divaricata">
+							<a href="https://bumarine.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Porites" target="_blank">
+								<span>Porites divaricata / Thin Finger Coral:</span>
+							</a>
+						</p>
+					</li>
+
+						<a href="https://photos.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Porites/i-gRqvGnG/0/ed60201a/XL/i-gRqvGnG-XL.jpg" data-lightbox="porites_divaricata1" class="image-preview" data-title="Close up of Porites divaricata">
+							<img src="https://photos.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Porites/i-gRqvGnG/0/ed60201a/XL/i-gRqvGnG-XL.jpg" alt="Close up of Porites divaricata" class="image-tooltip" data-description="Close up of Porites divaricata">
+						</a>
+
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2022/December-17-Crooked-Creek/i-723dWn9/0/DDmBzZ6M9dKrsHDW2RWqcMdW8NnQjHfzWVBGvmXLM/XL/2022_1217_AM_CrookedCreek_0975-XL.jpg" data-lightbox="porites_divaricata2" class="image-preview" data-title="Sideview up of Porites divaricata">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2022/December-17-Crooked-Creek/i-723dWn9/0/DDmBzZ6M9dKrsHDW2RWqcMdW8NnQjHfzWVBGvmXLM/XL/2022_1217_AM_CrookedCreek_0975-XL.jpg" alt="Sideview of Porites divaricata" class="image-tooltip" data-description="Sideview of Porites divaricata">
+						</a>
+						
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2022/December-17-Crooked-Creek/i-Q8XMTwg/0/DKqXLFF84cbM5pT59GhTXGHbq9V93M9dXQr7cWTpq/XL/2022_1217_AM_CrookedCreek_1028-XL.jpg" data-lightbox="porites_divaricata3" class="image-preview" data-title="Coral and its buddy">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2022/December-17-Crooked-Creek/i-Q8XMTwg/0/DKqXLFF84cbM5pT59GhTXGHbq9V93M9dXQr7cWTpq/XL/2022_1217_AM_CrookedCreek_1028-XL.jpg" alt="Coral and its buddy" class="image-tooltip" data-description="Coral and its buddy">
+						</a>
+					<br>
+						<hr>
+					<br>
+					
+					<li>
+						<p id="siderastrea">
+							<a href="https://bumarine.smugmug.com/ORGANISMS/METAZOA-animals/CNIDARIA/CORALS/Sideastrea" target="_blank">
+								<span>Siderastrea / Massive Starlet Coral:</span>
+							</a>
+						</p>
+					</li>
+
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2022/December-17-Crooked-Creek/i-rRdxq5d/0/FJkFT7k74wnvhDqctk5jFcv88kxpPcLp5wJTDGm6v/XL/2022_1217_AM_CrookedCreek_1149-XL.jpg" data-lightbox="siderastrea1" class="image-preview" data-title="Close up of siderastrea which is also part of Stony Coral">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2022/December-17-Crooked-Creek/i-rRdxq5d/0/FJkFT7k74wnvhDqctk5jFcv88kxpPcLp5wJTDGm6v/XL/2022_1217_AM_CrookedCreek_1149-XL.jpg" alt="Close up of siderastrea which is also part of Stony Coral" class="image-tooltip" data-description="Close up of siderastrea which is also part of Stony Coral">
+						</a>
+
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2022/December-17-Crooked-Creek/i-2THdWLz/0/FB4xC2H2NnvrzwnxGpskZx4csLmshX3ZX55bkkq6C/XL/2022_1217_AM_CrookedCreek_0996-XL.jpg" data-lightbox="siderastrea2" class="image-preview" data-title="Most corals have friends.">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2022/December-17-Crooked-Creek/i-2THdWLz/0/FB4xC2H2NnvrzwnxGpskZx4csLmshX3ZX55bkkq6C/XL/2022_1217_AM_CrookedCreek_0996-XL.jpg" alt="Most corals have friends." class="image-tooltip" data-description="Most corals have friends.">
+						</a>
+						
+						<a href="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-T93Brvz/0/CNGFGzkbLSk8CWHfPx3SbdqXNbFcxzV86MXM6g7Cb/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0129-X2.jpg" data-lightbox="siderastrea3" class="image-preview" data-title="Siderastrea is generally found in shallow parts of the western Atlantic Ocean.">
+							<img src="https://photos.smugmug.com/COURSES/Tropical-Marine-Invertebrates-/2017/December-10-Calabash-Seagrass-Patch-Reef/i-T93Brvz/0/CNGFGzkbLSk8CWHfPx3SbdqXNbFcxzV86MXM6g7Cb/X2/2017_1210_BI569_CheckoutSnorkel_Vixia_0129-X2.jpg" alt="Siderastrea is generally found in shallow parts of the western Atlantic Ocean." class="image-tooltip" data-description="Siderastrea is generally found in shallow parts of the western Atlantic Ocean.">
+						</a>
+						
+					<br><br>			
+			</div>
+        </div>
+    </div>
+
+	<!-- ------------
+		Graph Tab
+	------------- -->
+
+	<div id="graph" class="tabcontent"><br>
+        <!-- Genotype Distribution Graph-->
+        <div class="user-input"><br>
+			<div class="collapsible">Visualising count of a specific genotype</div>
+            <div class="content"><br>
+			<a href="#" onclick="openTab(event, 'help', 'bar_help')" id="help_bar" class="no-visited-style">Help</a><br><br>
+            <!-- TODO: Add header for "get genotype distribution" plot-->
+            <!-- TODO: Add description -->
+			<a href="#" onclick="openTab(event, 'help', 'help_scaffoldid')" id="scaffold_help" class="no-visited-style">Input Scaffold ID:</a>&nbsp;&nbsp;&nbsp;
+			<input type="text" id="scaffold_graph" placeholder="Sc0000458...">
+			<span class="example-text">(Example Scaffold IDs: 
+				<span class="example-values" onclick="fillInput('scaffold_graph', 'Sc0000458')">Sc0000458</span>, 
+				<span class="example-values" onclick="fillInput('scaffold_graph', 'Sc0000211')">Sc0000211</span>
+			)</span>
+
+			<br><br>
+			
+
+			<a href="#" onclick="openTab(event, 'help', 'help_majorminor')" id="majorminor_help" class="no-visited-style">Major or Minor Allele?</a>&nbsp;&nbsp;&nbsp;
+				<select style="height: 25px; width: 150px; text-align: center;" id="geno_graph">
+					<option value="Homozygous Ref" selected>Homozygous Ref</option>
+					<option value="Homozygous Alt">Homozygous Alt</option>
+                    <option value="Heterozygous">Heterozygous</option>
+				</select>
+			</p>
+			<p>
+				<button style=" height:40px; width:75px; border-radius: 25px; cursor: pointer; background-color: white;" id="get_geno_graph_button" type="button">Plot</button><br><br>
+			</p>
+            <div id='geno_dist_plot'></div>
+			<div id='download_link'><button style="display:none;" class="download_table" onclick="exportImage();showDiv();"> Download Image </button> </div>
+			<br>
+		</div>
+		<br>
+        <!-- Line Graph -->
+        <!-- 
+            Input: TagID
+            Query output: eco volume
+            Graph: line graph of eco volume across 4 years
+        -->
+			<div class="collapsible">Visualising continous variables across years</div>
+            <div class="content"><br>
+			<a href="#" onclick="openTab(event, 'help', 'line_help')" id="help_line" class="no-visited-style">Help</a><br><br>
+            <!-- TODO: Add header description -->
+			<a href="#" onclick="openTab(event, 'help', 'help_tagid')" id="tagid_help" class="no-visited-style">Input Tag ID:</a>&nbsp;&nbsp;&nbsp;
+            <input type="text" id="line_graph_tagID_input" placeholder="121...">
+            <span class="example-text">(Example Tag IDs: 
+				<span class="example-values" onclick="fillInput('line_graph_tagID_input', '121')">121</span>, 
+				<span class="example-values" onclick="fillInput('line_graph_tagID_input', '170')">170</span>)
+            </span>
+            <p>
+				<button style=" height:40px; width:75px; border-radius: 25px; cursor: pointer; background-color: white;" id="get_line_graph_button" type="button">Plot</button><br><br>
+			</p>
+            <div id="line_graph"></div>
+			<br>
+        </div>
+	</div> 
+</div>
+
+    <!-- ---------
+        HELP TAB
+    ----------- -->
+    <div id="help" class="tabcontent"><br>
+        <div class="input-background">
+            <p><strong>The steps below can be used as a guide to navigate the site:</strong></p>
+			<ol>
+				<li> Data tab allows the user to explore the dataset. Different filters can be applied based on the use case and a table with the results is returned.</li>
+				<li> Additionally this table can be exported in the desired format for further processing.</li>
+				<li> The Graph tab allows the user to plot different columns to visually explore the data.</li>
+				<li> The Media tab hosts images from the BU Marine Program Webpage and  has pictures from different species of corals, including Porites Stony Coral.</li>
+				<li> Lastly the Help tab has detailed information on each header/section which can be used as a reference whenever required.</li><br>
+			</ol>
+			<p><strong>Note: in case of any confusion, each header/section is linked to the relevant Help tab section for clarifications.</strong></p>	
+			<br>
+			<p><strong>Further information on each tab/filter which can be found below:</strong></p>
+            <ol>
+				<br>
+				<div class="collapsible">Explanation on tabs</div>
+					<div class="content">
+						<ul>
+							<li>
+								<p><a id="help_home">Home tab:</a></p>
+								<ul>
+									<li> Introduction page with information on student developers, lab that the website was developed under and the general abstract of the project.</li>
+								</ul>
+							</li>
+
+							<li>
+								<p><a id="help_dat">Data tab:</a></p>
+								<ul>
+									<li> This tab is the main tab which can be used to explore the dataset.</li>
+									<li> There are multiple filter tabs which can be used if desired (except of year which is a required field and the default is 2015).</li>
+									<li> The table displayed can further be exported in the desired format for further processing if required.</li>
+								</ul>
+							</li>
+
+							<li>
+								<p><a id="help_graph">Graph tab:</a></p>
+								<ul>
+									<li> This tab allows the user to explore the data in an interactive visual manner.</li>
+									<li> The options to plot the data are available through dropdowns. The graph can be downloaded if required. </li>
+								</ul>
+							</li>
+
+							<li>
+								<p><a id="help_media">Media tab:</a></p>
+								<ul>
+									<li> This tab hosts images from the BU Marine Program Webpage and are specific to different species of corals.</li>
+									<li> The list can be used to navigate the page and the headers link out to BU Marine page where the main folders divided species wide.</li>
+								</ul>
+							</li>
+
+							<li>
+								<p><a id="help_media">Help tab:</a></p>
+								<ul>
+									<li> This tab hosts detailed information and tips on how to navigate the site.</li>
+									<li> Each header is linked to the relevant help tab but additionally the user can navigate the help tab itself.</li>
+								</ul>
+							</li>
+						</ul>	
+				<br>		
+				</div>		
+				
+				<br>
+                    <div class="collapsible">General Filters</div>
+					<div class="content">
+					 <ul>
+						<p>A straightforward way to retrieve information on a particular coral is to input a Tag ID or Scaffold ID of interest. Note that it is possible for multiple SNPs to exist per scaffold.
+							</p>
+						<li>
+							<p><a id="help_tagid">Tag ID:</a></p>
+							<ul>
+								<li> Tag IDs are used to uniquely identify each coral.</li>
+								<li> Some corals have phenotypic data across years and would share a common tag ID. </li>
+							</ul>
+						</li>
+						<li>
+							<p><a id="help_scaffoldid">Scaffold ID:</a></p>
+							<ul>
+								<li> Scaffold IDs are used to identify variant information present in the VCF.</li>
+								<li> These are not unique values, and multiple corals can have the same variants/corresponding Scaffold IDs. </li>
+							</ul>
+						</li>	
+						<li>
+							<p><a id="help_linkingvcf">Link phenotypic data with VCF data?</a></p>
+							<ul>
+								<li> Phenotypic data can be linked to the VCF information if needed. This can help study variants for corals and reveal patterns that might be present in a few individuals.</li>
+								<li> Linking VCF information will return a table with all columns from the phenotypic data AND the VCF table. </li>
+								<li> Variants for individuals will not change based on year since they are not dependant on time, but all the VCF information was processed and compiled in 2018. </li>
+								<li> <strong>Select YES if VCF information is required or if VCF Filters need to be used, since otherwise the information will not be retrieved.</strong></li>
+							</ul>
+						</li>
+						<p>If there are other filters which need to be applied to then they can be selected from the Phenotypic Data Filter tab, VCF Filter tab or the Advanced Data Filter tab.
+							(See below for further details on those sections)
+						</p>
+					</ul>
+                    <br>
+					</div>
+                <br>
+                    <div class="collapsible">Phenotypic Data Filters</div>
+					<div class="content">
+					<ul>
+						<li>
+							<p><a id="help_year">Year:</a></p>
+							<ul>
+								<li>Similar to location, the year filter allows the user to filter data based on the year of interest. Data was collected over 4 years: 2015, 2016, 2017 and 2018.</li>
+								<li>Checkboxes are present to select the years of interest, and multiple years can be selected if desired.</li>
+								<li>The years selected are the ONLY ones which will be returned. </li>
+								<li><strong>Year CANNOT BE BLANK due to the nature of the dataset and the default year is 2015.</strong></li>
+							</ul>
+						</li>
+						<li>
+							<p><a id="help_location">Location:</a></p>
+							<ul>
+								<li>There are 4 locations from where coral data was collected from: Channel-North, Channel-South, Creek-West and Creek-East.</li>
+								<li>There are checkboxes present to select the locations of interest, and multiple locations can be selected if desired.</li>
+								<li>The locations selected are the <strong>ONLY</strong> ones which will be returned. It should be left blank if all values are of interest.</li>
+							</ul>	
+						</li>
+						<li>
+							<p><a id="help_mortality">Mortality:</a></p>
+							<ul>
+								<li>Similar to other checkbox filters, the mortality filter allows the user to filter data based whether the coral of interest on Alive/Dead/Missing/New.
+                                    New refers to the corals that are alive but have started being tracked in that particular year. An older coral would be under alive in the later years.
+                                </li>
+								<li>There are many corals which correspond to dead <strong>OR</strong> missing since determining the cause of disappearance is difficult. 
+								The corals with both values will be returned irrespective of whether dead is chosen or missing. It should be left blank if all values are of interest.</li>
+								<li>This filter is particularly useful in combination with the year filter to study the survivalship of the corals of interest.</li>
+							</ul>
+						</li>
+                        <li>
+							<p><a id="help_eco_vol">Ecological Volume:</a></p> 
+							<ul>
+								<li>Refers to the volume (in cm<sup>3</sup>) which is occupied by the coral colony. </li>
+								<li>Slider can be used to pick a cutoff value (i.e, all corals with volume <strong>LESS THAN</strong> the selected value will be returned). It should be left at default which is the max, if all values are of interest.</li>
+								<li>The sliders number is updated dynamically above the slider and can be used to pick cutoff values with increased sensitivity.</li>
+							</ul>
+						</li>
+						<li>
+							<p><a id="help_ln_eco_vol">Natural Log of Ecological Volume:</a></p>
+							<ul>
+								<li>Natural log of ecological volume in cm<sup>3</sup>.</li>
+								<li>Slider can be used to pick a cutoff value (i.e, all corals with volume <strong>LESS THAN</strong> the selected value will be returned). It should be left at default which is the max, if all values are of interest.</li>
+								<li>The sliders number is updated dynamically above the slider and can be used to pick cutoff values with increased sensitivity.</li>
+							</ul>
+						</li>	
+                        <li>
+							<p><a id="help_length">Length:</a></p>
+							<ul>
+								<li>Length of coral polyp in centimeter.</li>
+								<li>Slider can be used to pick a cutoff value (i.e, all corals with polyp length <strong>LESS THAN</strong> the selected value will be returned). It should be left at default which is the max, if all values are of interest.</li>
+								<li>The sliders number is updated dynamically above the slider and can be used to pick cutoff values with increased sensitivity.</li>
+							</ul>
+						</li>
+                        <li>
+							<p><a id="help_width">Width:</a></p>
+							<ul>
+								<li>Width of coral polyp in centimeter.</li>
+								<li>Slider can be used to pick a cutoff value (i.e, all corals with polyp width <strong>LESS THAN</strong> the selected value will be returned). It should be left at default which is the max, if all values are of interest.</li>
+								<li>The sliders number is updated dynamically above the slider and can be used to pick cutoff values with increased sensitivity.</li>
+							</ul>
+						</li>
+                        <li>
+							<p><a id="help_height">Height:</a></p>
+							<ul>
+								<li>Height of coral polyp in centimeter.</li>
+								<li>Slider can be used to pick a cutoff value (i.e, all corals with polyp height <strong>LESS THAN</strong> the selected value will be returned).It should be left at default which is the max, if all values are of interest.</li>
+								<li>The sliders number is updated dynamically above the slider and can be used to pick cutoff values with increased sensitivity.</li>
+							</ul>
+						</li>						
+					</ul>
+                    <br>
+					</div>
+				<br>
+				<div class="collapsible"> VCF Filters</div>
+					<div class="content">
+					<ul>
+						<li>
+							<p><a id="help_allele_freq">Allele Frequency:</a></p> 
+							<ul>
+								<li>Allele frequency refers to the relative frequency of the variant at a particular locus. 
+								This is an important metric since it can be used to study the fraction of all chromosomes in the population 
+								that carry that allele over the sample size, especially if it can potentially make corals resilient for better survivalship.</li>
+								<li>Slider can be used to pick a cutoff value (i.e, all corals with allele frequency <strong>LESS THAN</strong> the selected value will be returned). It should be left at default which is the max, if all values are of interest.</li>
+								<li>The sliders number is updated dynamically above the slider and can be used to pick cutoff values with increased sensitivity.</li>
+							</ul>
+						</li>
+					</ul>
+                    <br>
+					</div>	
+				<br>
+				<div class="collapsible"> Advanced Data Filters</div>
+					<div class="content">
+					<ul>
+						<li>
+							<p><a id="help_groupby">Group By:</a></p> 
+							<ul>
+								<li>When a group by is performed all the variables from that category are divided into bins and an aggregate function/count of interest is returned for those bins.</li>
+								<li>For example, if a group by location is done, the data is divided into bins based on the 4 locations and an aggregate function or count would be returned for each location.</li>
+								<li>The default is <strong>None.</strong></li>
+							</ul>
+						</li>
+						<p>Aggregate functions are useful to get a basic statistic once the information is grouped by a value of interest, like counting the number of alive corals 
+						in all the locations of interest. This can help unearth patterns of survival/harsher environments. For more information on aggregate functions and group by please read below:</p>
+						<li>
+							<p><a id="help_count">Number of individuals / Count:</a></p> 
+							<ul>
+								<li>Count helps to count the number individuals based on based on the selected group by function. The default is <strong>NO</strong>.</li>
+								<li>This can be useful in gaining insight on the data on a larger scale.</li>
+							</ul>
+						</li>
+						<li>
+							<p><a id="help_average">Average:</a></p> 
+							<ul>
+								<li>Average computes the average of variable of interest, e.g, length/width/height/ecological volume of polyps. The default is <strong>None.</strong></li>
+								<li>This can be useful for comparative studies.</li>
+							</ul>
+						</li>
+					</ul>
+                    <br>
+				</div>	
+				<br>	
+				<div class="collapsible"> Graphs tab</div>
+					<div class="content">
+					<ul>
+						<li>
+							<p><a id="bar_help">Count of a specific genotype</a></p>
+							<ul>
+								<li> The bar graph represents the count of a specific genotype for a specific SNP by location.</li>
+							</ul>
+						</li>
+						<li>
+							<p><a id="help_majorminor">Major or Minor Allele?</a></p>
+							<ul>
+								<li> At a given SNP, the most common allele is referred to as the major allele and the minor allele is the less common allele for a SNP (This measure can be used to get a rough idea of the variation of genotypes for a given SNP in a given population, to study how common the SNP is.)</li>
+								<li> Homozygous refers to having inherited the same alleles of a genomic marker from each biological parent.</li>
+								<li> Homozygous alt refers to the alternate allele being present at that location for both alleles.</li>
+								<li> Heterozygous refers to having different alleles for a particular trait.</li>
+							</ul>
+						</li>						
+						<li>
+							<p><a id="line_help">Continous variables across years</a></p>
+							<ul>
+								<li> The line graph represents different variables like length/width/height per coral across the years.</li>
+							</ul>
+						</li>	
+					</ul>
+                    <br>
+				</div>	
+            </ol>
+			<br>
+        </div>
+    </div>
+
+    <!-- ------------------------
+        JAVASCRIPT/JQUERY/AJAX
+    --------------------------- -->
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/shim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-tableexport@1.0.1/dist/tableExport.min.js"></script>
+
+    <!-- Main -->
+    <script>
+        // Load in google charts
+        google.charts.load("current", {packages:["corechart"]});
+
+        //////////////////
+        //  Filter Tab  //
+        //////////////////
+
+		function openTab(evt, tabName, scrollToTab) {
+			// Open the specified tab
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tab");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].classList.remove("active");
+			}
+			
+			document.getElementById(tabName).style.display = "block";
+			
+			evt.currentTarget.classList.add("active");
+	
+			// Check if the current tab is the help tab
+			if (tabName !== 'help') {
+				// Close all collapsible sections within the help tab
+				var helpCollapsibleButtons = document.querySelectorAll('#help .collapsible');
+				helpCollapsibleButtons.forEach(function(collapsibleButton) {
+					collapsibleButton.classList.remove('active');
+					var content = collapsibleButton.nextElementSibling;
+					content.style.display = 'none';
+				});
+			}
+
+			// Scroll to the specified tab and uncollapse the corresponding section
+			if (scrollToTab) {
+				var helpSectionId = scrollToTab;
+				var helpSection = document.getElementById(helpSectionId);
+				if (helpSection) {
+					// Uncollapse the corresponding section
+					var collapsibleButton = helpSection.closest('.content').previousElementSibling;
+					if (collapsibleButton && collapsibleButton.classList.contains('collapsible')) {
+						collapsibleButton.classList.add('active');
+						var content = collapsibleButton.nextElementSibling;
+						if (content.style.display === 'block') {
+							content.style.display = 'none';
+						} else {
+							content.style.display = 'block';
+						}
+					}
+					// Add highlight class temporarily
+					helpSection.classList.add('highlight');
+					setTimeout(function() {
+						// Scroll to the help section
+						helpSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					}, 100);
+					setTimeout(function() {
+						// Remove highlight class after 2 seconds
+						helpSection.classList.remove('highlight');
+					}, 2000);
+				}
+			}
+		}
+
+        // Collapsible section functionality
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                console.log("Clicked!");
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+		coll[0].click();
+		
+		// JavaScript code to fill input fields with example values
+		function fillInput(inputId, exampleValue) {
+			var inputField = document.getElementById(inputId);
+			inputField.value = exampleValue;
+		}
+
+
+
+
+		// Sliders
+        var ecoVolSlider = document.getElementById('eco_vol');
+        var lnEcoVolSlider = document.getElementById('ln_eco_vol');
+        var alleleFreqSlider = document.getElementById('allele_freq');
+        var lengthSlider = document.getElementById('length');
+		var widthSlider = document.getElementById('width');
+		var heightSlider = document.getElementById('height');
+	    var count = document.getElementById('count');
+        var average = document.getElementById('average');
+        var groupby = document.getElementById('groupby');
+        var vcf = document.getElementById('vcf');
+		var ecoVol_field = 0;
+		var lnVol_field = 0;
+		var allele_field = 0;
+		var length_field = 0;
+		var width_field = 0;
+		var height_field = 0;
+
+        noUiSlider.create(ecoVolSlider, {
+            start: [35000],
+			tooltips: true,
+			connect: 'lower',
+			behaviour: 'hover-snap',
+            range: {
+                'min': 0,
+                'max': 35000
+            },
+            pips: {
+                mode: 'values',
+                values: [0, 10000, 20000, 30000, 35000],
+                density: 4
+            }
+        });
+		ecoVolSlider.noUiSlider.on('update', function (values, handle) {
+			 ecoVol_field = values[handle]; 
+		});
+
+		ecoVol_field = ecoVolSlider.noUiSlider.get();
+		
+        noUiSlider.create(lnEcoVolSlider, {
+            start: [12],
+			tooltips: true,
+			connect: 'lower',
+			behaviour: 'hover-snap',
+            range: {
+                'min': -4,
+                'max': 12
+            },
+            pips: {
+                mode: 'values',
+                values: [-4, 0, 4, 8, 12],
+                density: 4
+            }
+        });
+		lnEcoVolSlider.noUiSlider.on('update', function (values, handle) {
+			lnVol_field = values[handle];
+		});
+
+		lnVol_field = ecoVolSlider.noUiSlider.get();
+
+        noUiSlider.create(alleleFreqSlider, {
+            start: [1],
+			tooltips: true,
+			connect: 'lower',
+			behaviour: 'hover-snap',
+            range: {
+                'min': 0,
+                'max': 1
+            },
+            pips: {
+                mode: 'values',
+                values: [0, 0.25, 0.5, 0.75, 1],
+                density: 4,
+				format: wNumb({ decimals: 2 })
+            },
+        });
+		alleleFreqSlider.noUiSlider.on('update', function (values, handle) {
+			allele_field = values[handle];
+		});
+
+		allele_field = ecoVolSlider.noUiSlider.get();
+
+        noUiSlider.create(lengthSlider, {
+            start: [50],
+			tooltips: true,
+			connect: 'lower',
+			behaviour: 'hover-snap',
+            range: {
+                'min': 0,
+                'max': 50
+            },
+            pips: {
+                mode: 'values',
+                values: [0, 10, 20, 30, 40, 50],
+                density: 4
+            }
+        });
+		lengthSlider.noUiSlider.on('update', function (values, handle) {
+			length_field = values[handle];
+		});
+
+		length_field = ecoVolSlider.noUiSlider.get();
+		
+		noUiSlider.create(widthSlider, {
+            start: [50],
+			tooltips: true,
+			connect: 'lower',
+			behaviour: 'hover-snap',
+            range: {
+                'min': 0,
+                'max': 50
+            },
+            pips: {
+                mode: 'values',
+                values: [0, 10, 20, 30, 40, 50],
+                density: 4
+            }
+        });
+		widthSlider.noUiSlider.on('update', function (values, handle) {
+			width_field= values[handle];
+		});
+
+		width_field = ecoVolSlider.noUiSlider.get();
+		
+		noUiSlider.create(heightSlider, {
+            start: [25],
+			tooltips: true,
+			connect: 'lower',
+			behaviour: 'hover-snap',
+            range: {
+                'min': 0,
+                'max': 25
+            },
+            pips: {
+                mode: 'values',
+                values: [0, 5, 10, 15, 20, 25],
+                density: 4
+            }
+        });
+		heightSlider.noUiSlider.on('update', function (values, handle) {
+			height_field = values[handle];
+		});
+
+		height_field = ecoVolSlider.noUiSlider.get();
+		
+		//Reset ALL filters button
+		document.getElementById('reset_all_filters').addEventListener('click', function() {
+			// Reset Tag ID input
+			document.getElementById('tagid').value = '';
+
+			// Reset Scaffold ID input
+			document.getElementById('scaffold').value = '';
+
+			// Reset VCF linking dropdown
+			document.getElementById("vcf").value = 'No';
+
+			// Reset for sort by dropdown
+			document.getElementById("sort_by").value = 'year';
+
+			// Reset Year checkboxes
+			document.querySelectorAll('input[name="year"]').forEach(function(checkbox) {
+				if (checkbox.value !== "2015") {
+					checkbox.checked = false;
+				} else {
+					checkbox.checked = true;
+				}
+			});
+
+			// Reset Location checkboxes
+			document.querySelectorAll('input[name="location"]').forEach(function(checkbox) {
+				checkbox.checked = false; 
+			});
+
+			// Reset Mortality checkboxes
+			document.querySelectorAll('input[name="mortality"]').forEach(function(checkbox) {
+				checkbox.checked = false; 
+			});
+
+			// Reset Ecological Volume slider
+			document.getElementById('eco_vol').noUiSlider.reset();
+
+			// Reset Natural Log of Ecological Volume slider
+			document.getElementById('ln_eco_vol').noUiSlider.reset();
+
+			// Reset Length slider
+			document.getElementById('length').noUiSlider.reset();
+
+			// Reset Width slider
+			document.getElementById('width').noUiSlider.reset();
+
+			// Reset Height slider
+			document.getElementById('height').noUiSlider.reset();
+
+			// Reset Allele Frequency slider
+			document.getElementById('allele_freq').noUiSlider.reset();
+
+			// Reset Count radio button
+			["count1"].forEach(function(id) {
+				document.getElementById(id).checked = false;
+			  });
+			["count2"].forEach(function(id) {
+				document.getElementById(id).checked = true;
+			  }); 
+
+			// Reset Average dropdown
+			document.getElementById("average").value = 'None';
+
+			// Reset Group by dropdown
+			document.getElementById("groupby").value = 'None';
+			
+		});
+		
+		// Reset buttons for all sliders
+		var ecoVolResetButton = document.getElementById('eco_vol_reset');
+		var lnEcoVolResetButton = document.getElementById('ln_eco_vol_reset');
+		var lengthResetButton = document.getElementById('length_reset');
+		var widthResetButton = document.getElementById('width_reset');
+		var heightResetButton = document.getElementById('height_reset');
+		var alleleResetButton = document.getElementById('allele_freq_reset');
+		
+		// Event listener for Ecological Volume reset button
+		ecoVolResetButton.addEventListener('click', function() {
+			ecoVolSlider.noUiSlider.set(35000);
+		});
+
+		// Event listener for LN Ecological Volume reset button
+		lnEcoVolResetButton.addEventListener('click', function() {
+			lnEcoVolSlider.noUiSlider.set(12);
+		});
+
+		// Event listener for Length reset button
+		lengthResetButton.addEventListener('click', function() {
+			lengthSlider.noUiSlider.set(50);
+		});
+
+		// Event listener for Width reset button
+		widthResetButton.addEventListener('click', function() {
+			widthSlider.noUiSlider.set(50);
+		});
+
+		// Event listener for Height reset button
+		heightResetButton.addEventListener('click', function() {
+			heightSlider.noUiSlider.set(25);
+		});
+		
+		// Event listener for Allele Frequency reset button
+		alleleResetButton.addEventListener('click', function() {
+			alleleFreqSlider.noUiSlider.set(1);
+		});
+		
+		// Reset ALL Slider button
+		document.getElementById('reset_all_sliders').addEventListener('click', function() {
+
+			// Reset Ecological Volume slider
+			document.getElementById('eco_vol').noUiSlider.reset();
+
+			// Reset Natural Log of Ecological Volume slider
+			document.getElementById('ln_eco_vol').noUiSlider.reset();
+
+			// Reset Length slider
+			document.getElementById('length').noUiSlider.reset();
+
+			// Reset Width slider
+			document.getElementById('width').noUiSlider.reset();
+
+			// Reset Height slider
+			document.getElementById('height').noUiSlider.reset();
+
+			// Reset Allele Frequency slider
+			document.getElementById('allele_freq').noUiSlider.reset();
+		});
+
+		function exportTable() {
+ 
+            // Variable to store the final csv data
+            let csv_data = [];
+ 
+            // Get each row data
+            let rows = document.getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+ 
+                // Get each column data
+                let cols = rows[i].querySelectorAll('td,th');
+ 
+                // Stores each csv row data
+                let csvrow = [];
+                for (let j = 0; j < cols.length; j++) {
+ 
+                    // Get the text data of each cell
+                    // of a row and push it to csvrow
+                    csvrow.push(cols[j].innerHTML);
+                }
+ 
+                // Combine each column value with comma
+                csv_data.push(csvrow.join(","));
+            }
+ 
+            // Combine each row data with new line character
+            csv_data = csv_data.join('\n');
+ 
+            // Call this function to download csv file  
+            downloadCSVFile(csv_data);
+ 
+        }
+
+		function downloadCSVFile(csv_data) {
+ 
+			// Create CSV file object and feed our
+			// csv_data into it
+			CSVFile = new Blob([csv_data], { type: "text/csv" });
+		 
+			// Create to temporary link to initiate
+			// download process
+			let temp_link = document.createElement('a');
+		 
+			// Download csv file
+			temp_link.download = "coral_data.csv";
+			let url = window.URL.createObjectURL(CSVFile);
+			temp_link.href = url;
+	
+			temp_link.style.display = "none";
+			document.body.appendChild(temp_link);
+
+			temp_link.click();
+			document.body.removeChild(temp_link);
+		}
+		
+		
+		///////////////////
+		/// Media Tab /////
+		///////////////////
+		
+		document.addEventListener('DOMContentLoaded', function () {
+			// Get all elements with class "image-tooltip"
+			const imageTooltips = document.querySelectorAll('.image-tooltip');
+
+			// Iterate over each image tooltip
+			imageTooltips.forEach(imageTooltip => {
+				// Add event listener for mouseover
+				imageTooltip.addEventListener('mouseover', (event) => {
+					const description = imageTooltip.getAttribute('data-description');
+					const tooltip = createTooltip(description);
+					positionTooltip(tooltip, event.clientX, event.clientY);
+				});
+
+				// Add event listener for mouseout
+				imageTooltip.addEventListener('mouseout', () => {
+					const tooltip = document.querySelector('.tooltip');
+					if (tooltip) {
+						tooltip.style.display = 'none';
+					}
+				});
+
+				// Add event listener for mousemove
+				document.addEventListener('mousemove', (event) => {
+					const tooltip = document.querySelector('.tooltip');
+					if (tooltip && tooltip.style.display !== 'none') {
+						positionTooltip(tooltip, event.clientX, event.clientY);
+					}
+				});
+
+				// Create and append tooltip element
+				function createTooltip(description) {
+					let tooltip = document.querySelector('.tooltip');
+					if (!tooltip) {
+						tooltip = document.createElement('div');
+						tooltip.classList.add('tooltip');
+						document.body.appendChild(tooltip);
+					}
+					tooltip.textContent = description;
+					tooltip.style.display = 'block';
+					return tooltip;
+				}
+
+				// Position tooltip element
+				function positionTooltip(tooltip, x, y) {
+					// Adjust x and y coordinates based on scroll position
+					const scrollX = window.scrollX || window.pageXOffset;
+					const scrollY = window.scrollY || window.pageYOffset;
+
+					tooltip.style.left = x + scrollX + 'px';
+					tooltip.style.top = y + scrollY + 10 + 'px';
+				}
+			});
+		});
+		
+		// Smmoth scrolling + highlight for href header to image header
+		function smoothScroll(event) {
+			event.preventDefault(); // Prevent default anchor behavior
+
+			const targetId = event.target.getAttribute('href').substring(1); // Get the target element ID
+			const targetElement = document.getElementById(targetId); // Get the target element
+
+			if (targetElement) {
+				// Add highlight class to the span element within the anchor tag
+				targetElement.querySelector('span').classList.add('highlight');
+
+				// Scroll to the center of the target element
+				targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+				// Remove highlight class after a delay
+				setTimeout(function() {
+					targetElement.querySelector('span').classList.remove('highlight');
+				}, 2000);
+			}
+		}
+
+		////////////////////
+		///// Graph Tab/////
+		////////////////////
+
+        ////////////////////
+        // AAAAJJJAAAXXXX //
+        ////////////////////
+        // For main table in data tab
+        $("#get_table_button").click(function(){
+            // Empty data table
+            $("#out_table").empty();
+            
+            // Retrieve all filters
+            let tagid = $("#tagid").val();
+            let scaffoldid = $("#scaffold").val();
+            let order_by = $("#sort_by").val();
+
+
+            // arrays
+            let year_array = [];
+            $("input:checkbox[name=year]:checked").each(function() { 
+                year_array.push($(this).val()); 
+            }); 
+            let years = year_array.join(':');
+                
+            let location_array = [];
+            $("input:checkbox[name=location]:checked").each(function() { 
+                location_array.push($(this).val()); 
+            });
+            let locations = location_array.join(':');
+            
+            let mortality_array = [];
+            $("input:checkbox[name=mortality]:checked").each(function() { 
+                mortality_array.push($(this).val()); 
+            });
+            let mortalities = mortality_array.join(':');
+
+            // sliders
+            let length_val = length_field;
+            let width_val = width_field;
+            let height_val = height_field;
+            let eco_vol_val = ecoVol_field;
+            let ln_eco_vol_val = lnVol_field;
+            let allele_freq_val = allele_field;
+            
+            let vcf = $("#vcf").val();
+
+            // advanced data filters
+            let groupby = $("#groupby").val();
+            let count = $("input[name='count']:checked").val();
+            let average = $("#average").val();
+
+            // Run checks on phenotypic data filter
+            if (year_array.length == 0) {
+                alert("Please select at least one year!")
+            
+            } else if (vcf == "No" && scaffoldid != "") {
+                alert("Please select Yes for VCF join if searching for a scaffold ID")
+
+            } else {
+                // AJAX call
+                $.get("https://bioed.bu.edu/cgi-bin/students_24/saumyapo/coral_cgi.py",
+                    {'tagid':tagid,
+                        'scaffoldid':scaffoldid,
+                        'year_array':years,
+                        'location':locations,
+                        'mortality':mortalities,
+                        'eco_vol_val':eco_vol_val,
+                        'ln_eco_vol_val':ln_eco_vol_val,
+                        'allele_freq_val':allele_freq_val,
+                        'length_val':length_val,
+                        'width_val':width_val,
+                        'height_val':height_val,
+                        'count':count,
+                        'average':average,
+                        'groupby':groupby,
+                        'vcf':vcf,
+                        'order_by':order_by
+                    },
+                    function(data){
+                        create_table(data)
+                    },
+                    "json");
+            }
+        })
+    
+
+        ///////////////n///////////////////////
+        // Create table from returned query //
+        //////////////////////////////////////
+        function create_table(json) {
+            // Check if table is empty
+            if ( Object.values(json).length === 0 ) {
+                alert(`Returned table was empty! Please check parameters`);
+                $("#out_table").empty();
+                return 1;
+            } 
+
+            // Initialize variable to store HTML table
+            let table_body_contents = "";
+            
+            // Retrieve variables to decide what table to produce
+            let join_vcf = $("#vcf").val();
+            let groupby = $("#groupby").val();
+            let count = $("input[name='count']:checked").val();
+            let average = $("#average").val();
+            
+
+            ////// Begin checks for table input
+
+
+            // If group by not selected but aggregate function is selected throw error
+            if (groupby == "None" && (average != "None" || count == "Yes")) {
+                alert("Please select a group by variable if you'd like to perform an aggregate function!")
+
+            // If group by selected and VCF selected throw error
+            } else if (groupby != "None" && join_vcf == "Yes") {
+                alert("Group by not implemented with VCF table!")
+
+            // If group by selected and both count and average selected throw error
+            } else if (groupby != "None" && (average != "None" && count == "Yes")) {
+                alert("Please select either count or average, not both!")
+            
+            // If group by selected but count and average are not selected
+            } else if (groupby != "None" && (average == "None" && count == "No")) {    
+                alert("If using group by, please select either count or average!")
+
+            // GROUP BY __ COUNT * TABLE
+            } else if (groupby != "None" && (average == "None" && count == "Yes")) {
+                // Select which columns to extract based on group by variable
+                if (groupby == "Location") {
+                    var col_idx = 1;
+                    var agg_col = 'Location';
+                } else if (groupby == "alive_status") {
+                    var col_idx = 3;
+                    var agg_col = 'Mortality'
+                }
+                // Populate table
+                for (let row = 0; row<json.length; row++) {
+                    let groupby_col = json[row][col_idx];
+                    let count = json[row][12];
+                    let year = json[row][13];
+
+                    table_body_contents +=  `<tr>
+                                                <td>${year}</td>
+                                                <td>${groupby_col}</td>
+                                                <td>${count}</td>
+                                            </tr>`;
+                    }
+
+                    var table_template = `<table id="location_count_table">
+                                                <thead><tr>
+                                                        <th>Year</th>
+                                                        <th>${agg_col}</th>
+                                                        <th>Count</th>
+                                                    </tr></thead>
+                                                <tbody>${table_body_contents}</tbody>
+                                            </table>`;
+
+                $("#out_table").append(table_template);
+                
+            // GROUP BY __ AVG(__)
+            } else if (groupby != "None" && (average != "None" && count == "No")) {
+                // Select which columns to extract based on group by variable
+                if (groupby == "Location") {
+                    var col_idx = 1;
+                    var agg_col = 'Location';
+                } else if (groupby == "alive_status") {
+                    var col_idx = 3;
+                    var agg_col = 'Mortality'
+                }
+
+                // Populate table
+                for (let row = 0; row<json.length; row++) {
+                    let groupby_col = json[row][col_idx];
+                    let agg_func = json[row][12];
+                    let year = json[row][13];
+
+                    table_body_contents +=  `<tr>
+                                                <td>${year}</td>
+                                                <td>${groupby_col}</td>
+                                                <td>${agg_func}</td>
+                                            </tr>`;
+                    }
+
+                var table_template = `<table id="location_count_table">
+                                            <thead><tr>
+                                                <th>Year</th>
+                                                <th>${agg_col}</th>
+                                                <th>avg(${average})</th>
+                                                </tr></thead>
+                                            <tbody>${table_body_contents}</tbody>
+                                        </table>`;
+
+                $("#out_table").append(table_template);
+
+            // Table for group by + average(function)
+            //} else if (groupby != "None" && (average != "None" && count == "No")) {
+            //    console.log('average table')
+
+            // Join VCF (no aggregate functions)
+            } else if (join_vcf == "Yes") {
+
+                for (let row = 0; row<json.length; row++) {
+                    
+                    let tagid = json[row][0];
+                    let loc = json[row][1];
+                    let notes = json[row][2];
+                    let alive_status = json[row][3];
+                    let length_cm = json[row][4];
+                    let width_cm = json[row][5];
+                    let height_cm = json[row][6];
+                    let eco_volume = json[row][7];
+                    let ln_eco_volume = json[row][8];
+                    let volume_cylinder = json[row][9];
+                    let tip_number = json[row][10];
+                    let old_tag = json[row][11];
+                    let CORAL_ID = json[row][12];
+                    let BAM_ID = json[row][13];
+                    let CHROM = json[row][14];
+                    let POS = json[row][15];
+                    let ID = json[row][16];
+                    let REF = json[row][17];
+                    let ALT = json[row][18];
+                    let QUAL = json[row][19];
+                    let FILTER = json[row][20];
+                    let NS = json[row][21];
+                    let INFO_DP = json[row][22];
+                    let AF = json[row][23];
+                    let GT = json[row][24];
+                    let FORMAT_DP = json[row][25];
+                    let GL = json[row][26];
+                    let PL = json[row][27];
+                    let GP = json[row][28];
+                    let year = json[row][29];
+
+                    table_body_contents +=  `<tr>
+                                                <td>${year}</td>
+                                                <td>${tagid}</td>
+                                                <td>${old_tag}</td>
+                                                <td>${loc}</td>
+                                                <td>${notes}</td>
+                                                <td>${alive_status}</td>
+                                                <td>${length_cm}</td>
+                                                <td>${width_cm}</td>
+                                                <td>${height_cm}</td>
+                                                <td>${eco_volume}</td>
+                                                <td>${ln_eco_volume}</td>
+                                                <td>${volume_cylinder}</td>
+                                                <td>${tip_number}</td>
+                                                <td>${BAM_ID}</td>
+                                                <td>${CHROM}</td>
+                                                <td>${POS}</td>
+                                                <td>${REF}</td>
+                                                <td>${ALT}</td>
+                                                <td>${QUAL}</td>
+                                                <td>${FILTER}</td>
+                                                <td>${NS}</td>
+                                                <td>${INFO_DP}</td>
+                                                <td>${AF}</td>
+                                                <td>${GT}</td>
+                                                <td>${FORMAT_DP}</td>
+                                                <td>${GL}</td>
+                                                <td>${PL}</td>
+                                                <td>${GP}</td>
+                                            </tr>`;
+                }
+
+                var table_template = ` <div class="scroll"><button class="download_table" onclick="exportTable()"> Download Table </button> 
+                                            <table id="vcf_table">
+                                                <thead><tr>
+                                                        <th>Year</th>
+                                                        <th>Tag ID</th>
+                                                        <th>Old Tag</th>
+                                                        <th>Location</th>
+                                                        <th>Notes</th>
+                                                        <th>Alive Status</th>
+                                                        <th>Length (cm)</th>
+                                                        <th>Width (cm)</th>
+                                                        <th>Height (cm)</th>
+                                                        <th>Eco Volume</th>
+                                                        <th>ln (eco_volume)</th>
+                                                        <th>Volume Cylinder</th>
+                                                        <th>Tip_number</th>
+                                                        <th>Bam ID</th>
+                                                        <th>Scaffold</th>
+                                                        <th>Position</th>
+                                                        <th>Reference</th>
+                                                        <th>Alternate</th>
+                                                        <th>Quality</th>
+                                                        <th>Filter</th>
+                                                        <th>NS</th>
+                                                        <th>INFO DP</th>
+                                                        <th>AF</th>
+                                                        <th>GT</th>
+                                                        <th>FORMAT_DP</th>
+                                                        <th>GL</th>
+                                                        <th>PL</th>
+                                                        <th>GP</th>
+                                                    </tr></thead>
+                                                <tbody>${table_body_contents}</tbody>
+                                            </table></div>`;
+                                            
+                $("#out_table").append(table_template);
+                
+
+            // No VCF join
+            } else if (join_vcf == "No") {
+
+                for (let row= 0; row<json.length; row++) {
+
+                    let tagid = json[row][0];
+                    let loc = json[row][1];
+                    let notes = json[row][2];
+                    let alive_status = json[row][3];
+                    let length_cm = json[row][4];
+                    let width_cm = json[row][5];
+                    let height_cm = json[row][6];
+                    let eco_volume = json[row][7];
+                    let ln_eco_volume = json[row][8];
+                    let volume_cylinder = json[row][9];
+                    let tip_number = json[row][10];
+                    let old_tag = json[row][11];
+                    let year = json[row][12];
+
+                    table_body_contents +=  `<tr>
+                                                <td>${year}</td>
+                                                <td>${tagid}</td>
+                                                <td>${old_tag}</td>
+                                                <td>${loc}</td>
+                                                <td>${notes}</td>
+                                                <td>${alive_status}</td>
+                                                <td>${length_cm}</td>
+                                                <td>${width_cm}</td>
+                                                <td>${height_cm}</td>
+                                                <td>${eco_volume}</td>
+                                                <td>${ln_eco_volume}</td>
+                                                <td>${volume_cylinder}</td>
+                                                <td>${tip_number}</td>
+                                            </tr>`;
+                    }
+
+                    var table_template = ` <div class="scroll"><button class="download_table" onclick="exportTable(phenotypic_table)"> Download Table </button><br><br><br><br>
+                                            <table id="phenotypic_table">
+                                                <thead><tr>
+                                                        <th>Year</th>
+                                                        <th>Tag ID</th>
+                                                        <th>Old Tag</th>
+                                                        <th>Location</th>
+                                                        <th>Notes</th>
+                                                        <th>Alive Status</th>
+                                                        <th>Length (cm)</th>
+                                                        <th>Width (cm)</th>
+                                                        <th>Height (cm)</th>
+                                                        <th>Ecological Volume</th>
+                                                        <th>ln(Ecological Volume)</th>
+                                                        <th>Volume Cylinder</th>
+                                                        <th>Tip Number</th>
+                                                    </tr></thead>
+                                                <tbody>${table_body_contents}</tbody>
+                                            </table></div>`;
+
+                    $("#out_table").append(table_template);
+
+            // } else if (join_vcf == "No") {
+            
+            // This else doesn't really do anything
+            } else {
+                console.log('Error in Join VCF')
+            }   
+        }
+
+
+
+        // AJAX call for genotype graph query 
+        // scaffoldid, major/minor allele
+        $("#get_geno_graph_button").click(function(){
+            // Empty graph div ?????????????//fILL IN RIGHT DIV!!!!!!!!!!!!!!!!!!!!!!!!
+            $("#geno_dist_plot").empty();
+            
+            let scaffold_graph = $("#scaffold_graph").val();
+            let geno_graph = $("#geno_graph").val();
+            
+            
+            //Check if scaffold has been input
+            if (scaffold_graph == "") {
+                alert("Please enter a scaffold ID first!");
+            }
+
+            $.get("https://bioed.bu.edu/cgi-bin/students_24/saumyapo/coral_cgi.py",
+                {'scaffold_graph':scaffold_graph,
+                    'geno_graph':geno_graph
+                },
+                function(data){
+                    create_vcf_barchart(data)
+                },
+                "json");
+        })
+        
+        // Function to create barchart
+        function create_vcf_barchart(json) {
+            let scaffold_graph = $("#scaffold_graph").val();
+            let geno_graph = $("#geno_graph").val();
+
+            if ( Object.values(json).length === 1 ) {
+                alert(`No ${geno_graph} genotypes found for ${scaffold_graph}`);
+                $("#geno_dist_plot").empty();
+
+            } else {
+                // Convert JSON to google charts data
+                let dataTable = google.visualization.arrayToDataTable(json);
+                
+                // Plot Options
+                let options = {
+                            title: `Count of Allele by location`,
+                            legend: { position: 'none' }
+                            //width
+                            //height
+                        };
+                
+                // Get div by id to put graph in 
+                let chart = new google.visualization.BarChart(document.getElementById("geno_dist_plot"));
+                chart.draw(dataTable, options);
+            }
+        }
+
+        // AJAX call for line graph query 
+        // input: tagID
+        $("#get_line_graph_button").click(function(){
+            
+            $("#line_graph").empty();
+            
+            let tagid = $("#line_graph_tagID_input").val();
+
+            if (tagid == "") {
+                alert("Please enter a tag ID first!")
+            }
+
+            $.get("https://bioed.bu.edu/cgi-bin/students_24/saumyapo/coral_cgi.py",
+                {'line_tagid':tagid},
+                function(data){
+                    create_linechart(data)
+                },
+                "json");
+        })
+
+        // Function for creating line graph
+        function create_linechart(json) {
+
+            let tagid = $("#line_graph_tagID_input").val();
+
+            if ( Object.values(json).length === 1 ) {
+                alert(`No data found for ${tagid}`);
+                $("#geno_dist_plot").empty();
+
+            } else {
+
+                let dataTable = google.visualization.arrayToDataTable(json);
+                
+                let tagid = $("#line_graph_tagID_input").val();
+                
+                let options = {
+                    title: ` Ecological Volume of ${tagid} over recorded years`,
+                    legend: { position: 'bottom' },
+                    hAxis: {format: '0'}
+                };
+                
+                let chart = new google.visualization.LineChart(document.getElementById("line_graph"));
+                chart.draw(dataTable, options);
+            }
+		}
+
+    </script>
+<br><br><br>
+</body>
+</html>
