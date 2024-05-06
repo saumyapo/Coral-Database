@@ -14,6 +14,15 @@ Database created using HTML, CSS, Javascript, AJAX and CGI to process and mainta
 
 <img width="958" alt="image" src="https://github.com/saumyapo/Coral-Database/assets/144373823/b3fac7df-61d3-4a4e-81dd-56236d69d566">
 
+ Explanation on each tab is below:
+
+ ### Data tab
+ 
+ <img width="947" alt="image" src="https://github.com/saumyapo/Coral-Database/assets/144373823/a1115d55-32bf-447c-99fd-52d5ce80bf5f">
+
+ Filters tab: Holds general filters which can be used for exploration of the data. There are further filters for phenotypic, VCF and advanced filter
+
+
 
 
 
