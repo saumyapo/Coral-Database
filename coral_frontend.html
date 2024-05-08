@@ -336,7 +336,7 @@
                         <div id="eco_vol"></div>
                         <br><br><br>
 
-                        <a href="#" onclick="openTab(event, 'help', 'help_ln_eco_vol')" id="ln_eco_vol_help" class="no-visited-style">Natural Log of Ecological Volume (cm<sup>3</sup>):</a>
+                        <a href="#" onclick="openTab(event, 'help', 'help_ln_eco_vol')" id="ln_eco_vol_help" class="no-visited-style">Natural Log of Ecological Volume:</a>
 						<button id="ln_eco_vol_reset" class="reset-button">Reset slider</button>
 						<br><br><br><br>
                         <div id="ln_eco_vol"></div>
@@ -560,9 +560,9 @@
 	<div id="graph" class="tabcontent"><br>
         <!-- Genotype Distribution Graph-->
         <div class="user-input"><br>
-			<div class="collapsible">Visualising count of a specific genotype</div>
+			<div class="collapsible">Visualising count of a genotype of interest</div>
             <div class="content"><br>
-			<a href="#" onclick="openTab(event, 'help', 'bar_help')" id="help_bar" class="no-visited-style">Help</a><br><br>
+			<a href="#" onclick="openTab(event, 'help', 'bar_help')" id="help_bar" style =  "float:right;" class="no-visited-style">Help</a><br><br>
             <!-- TODO: Add header for "get genotype distribution" plot-->
             <!-- TODO: Add description -->
 			<a href="#" onclick="openTab(event, 'help', 'help_scaffoldid')" id="scaffold_help" class="no-visited-style">Input Scaffold ID:</a>&nbsp;&nbsp;&nbsp;
@@ -596,9 +596,9 @@
             Query output: eco volume
             Graph: line graph of eco volume across 4 years
         -->
-			<div class="collapsible">Visualising continous variables across years</div>
+			<div class="collapsible">Visualising ecological volume across years</div>
             <div class="content"><br>
-			<a href="#" onclick="openTab(event, 'help', 'line_help')" id="help_line" class="no-visited-style">Help</a><br><br>
+			<a href="#" onclick="openTab(event, 'help', 'line_help')" id="help_line" style =  "float:right;" class="no-visited-style">Help</a><br><br>
             <!-- TODO: Add header description -->
 			<a href="#" onclick="openTab(event, 'help', 'help_tagid')" id="tagid_help" class="no-visited-style">Input Tag ID:</a>&nbsp;&nbsp;&nbsp;
             <input type="text" id="line_graph_tagID_input" placeholder="121...">
@@ -653,10 +653,10 @@
 							</li>
 
 							<li>
-								<p><a id="help_graph">Graph tab:</a></p>
+								<p><a id="help_graph">Graphs tab:</a></p>
 								<ul>
 									<li> This tab allows the user to explore the data in an interactive visual manner.</li>
-									<li> The options to plot the data are available through dropdowns. The graph can be downloaded if required. </li>
+									<li> The options to plot the data are available through dropdowns. </li>
 								</ul>
 							</li>
 
@@ -842,7 +842,7 @@
 					<div class="content">
 					<ul>
 						<li>
-							<p><a id="bar_help">Count of a specific genotype</a></p>
+							<p><a id="bar_help">Count of a genotype of interest</a></p>
 							<ul>
 								<li> The bar graph represents the count of a specific genotype for a specific SNP by location.</li>
 							</ul>
@@ -857,9 +857,10 @@
 							</ul>
 						</li>						
 						<li>
-							<p><a id="line_help">Continous variables across years</a></p>
+							<p><a id="line_help">Ecological volume across years</a></p>
 							<ul>
-								<li> The line graph represents different variables like length/width/height per coral across the years.</li>
+								<li> The line graph represents the distribution of ecological volume per coral across the years.</li>
+								<li>Ecological volume is calculated based on length, width and height for each coral.</li>
 							</ul>
 						</li>	
 					</ul>
@@ -1805,6 +1806,10 @@
                 
                 // Get div by id to put graph in 
                 let chart = new google.visualization.BarChart(document.getElementById("geno_dist_plot"));
+				google.visualization.events.addListener(chart, 'ready', function () {
+					geno_dist_plot.innerHTML = '<img src="' + chart.getImageURI() + '">';
+					console.log(geno_dist_plot.innerHTML);
+				});
                 chart.draw(dataTable, options);
             }
         }
@@ -1851,6 +1856,11 @@
                 };
                 
                 let chart = new google.visualization.LineChart(document.getElementById("line_graph"));
+				
+				google.visualization.events.addListener(chart, 'ready', function () {
+					line_graph.innerHTML = '<img src="' + chart.getImageURI() + '">';
+					console.log(line_graph.innerHTML);
+				});
                 chart.draw(dataTable, options);
             }
 		}
