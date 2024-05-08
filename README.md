@@ -92,6 +92,10 @@ The aim of the project was to develop a website to explore, visual and filter th
 
  ## Help Tab
  <img width="650" alt="image" src="https://github.com/saumyapo/Coral-Database/assets/144373823/f8bf23f1-3ab6-4360-87b5-1062d6aa4fbd">
+ 
+ - This tab hosts a guide and in depth FAQs on each section and input required so that people with a non-scientific and non-Bioinformatic background can easily use the site as well.
+ - When a header is clicked in other tabs, the user is re-directed to the help tab, where the corresponding section is centered and highlighted for ease of use.
+<img width="650" alt="image" src="https://github.com/saumyapo/Coral-Database/assets/144373823/ba429411-42d4-4a8c-82c9-1656a7f90f4f">
 
 
 
