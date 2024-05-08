@@ -1,5 +1,5 @@
 
-![Built Using](https://img.shields.io/badge/Built%20Using-HTML%20,%20Javascript%20,%20SQL%20,%20AJAX%20,%20CGI-blue.svg)
+![Built Using](https://img.shields.io/badge/Built%20Using-HTML,%20Javascript,%20SQL,%20AJAX,%20CGI-blue.svg)
 [![Developed by:](https://img.shields.io/badge/Developed%20by:-grey)](https://github.com/saumyapo/Coral-Database/) [![Saumya Pothukuchi](https://img.shields.io/badge/Saumya_Pothukuchi-purple)](https://github.com/saumyapo) [![Johnathan Zhang](https://img.shields.io/badge/Johnathan_Zhang-yellow)](https://github.com/John2018330) [![Zachary Derse](https://img.shields.io/badge/Zachary_Derse-darkgreen)](https://github.com/zachderse) [![Grace Aboussleman](https://img.shields.io/badge/Grace_Aboussleman-darkred)](https://github.com/graceabouss)
 
 *The website was created using data obtained from Dr. John Finnerty's lab at BU. Currently a work in progress to migrate the website off BU servers.*  
